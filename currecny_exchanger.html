@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="mainpro.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /></head>
+    <style>
+        *
+{
+    margin: 0;
+}
+.heading
+{
+    align-items: center;
+     text-align: center;
+}
+.main
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10vmin;
+    justify-content: center;
+}
+.result
+{
+    text-align: center;
+}
+#final
+{
+    border-radius: 5px;
+    border: none;
+    margin-top: 5vmin;
+}
+.first,.second
+{
+    width: 150px;
+    height: 150px;
+}
+.from-data,.to-data
+{
+    text-align: center;
+}
+.input
+{
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+}
+    </style>
+<body>
+    <div class="heading">
+        <h2>MONEY EXCHANGER</h2>
+    </div>
+    <div class="input">
+        <label for="text">ENTER AMOUNT</label>
+        <br>
+        <input type="number" class="input-num">
+    </div>
+        <div class="main">
+            <div class="from-data">
+                <div class="flags1">
+                    <img src="https://flagsapi.com/US/flat/64.png" alt="some issue" class="first">
+                </div>
+                <select  id="sample1">
+                    <option value="USD">US</option>
+                </select>
+            </div>
+            <div class="exchanger">
+            <i class="fa-solid fa-right-left"></i>
+            </div>
+            <div class="to-data">
+                <div class="flags2">
+                    <img src="https://flagsapi.com/IN/flat/64.png" alt="NO IMAGE" class="second">
+                </div>
+                <select  id="sample2">
+                    <option value="INR">IND</option>
+                </select>
+            </div>
+      </div>
+      <div class="result">
+        <button id="final">EXCHANGE HERE</button>
+        <p id="data-final"></p>
+        <p id="final-result"></p>
+      </div>
+    <!-- <script src="mainpronew.js"></script>
+      -->
+    <script>
+                                                                                                                                                                                                                                                                                                                                        
+const countryList = {
+    AED: "AE",
+    AFN: "AF",
+    XCD: "AG",
+    ALL: "AL",
+    AMD: "AM",
+    ANG: "AN",
+    AOA: "AO",
+    AQD: "AQ",
+    ARS: "AR",
+    AUD: "AU",
+    AZN: "AZ",
+    BAM: "BA",
+    BBD: "BB",
+    BDT: "BD",
+    XOF: "BE",
+    BGN: "BG",
+    BHD: "BH",
+    BIF: "BI",
+    BMD: "BM",
+    BND: "BN",
+    BOB: "BO",
+    BRL: "BR",
+    BSD: "BS",
+    NOK: "BV",
+    BWP: "BW",
+    BYR: "BY",
+    BZD: "BZ",
+    CAD: "CA",
+    CDF: "CD",
+    XAF: "CF",
+    CHF: "CH",
+    CLP: "CL",
+    CNY: "CN",
+    COP: "CO",
+    CRC: "CR",
+    CUP: "CU",
+    CVE: "CV",
+    CYP: "CY",
+    CZK: "CZ",
+    DJF: "DJ",
+    DKK: "DK",
+    DOP: "DO",
+    DZD: "DZ",
+    ECS: "EC",
+    EEK: "EE",
+    EGP: "EG",
+    ETB: "ET",
+    EUR: "FR",
+    FJD: "FJ",
+    FKP: "FK",
+    GBP: "GB",
+    GEL: "GE",
+    GGP: "GG",
+    GHS: "GH",
+    GIP: "GI",
+    GMD: "GM",
+    GNF: "GN",
+    GTQ: "GT",
+    GYD: "GY",
+    HKD: "HK",
+    HNL: "HN",
+    HRK: "HR",
+    HTG: "HT",
+    HUF: "HU",
+    IDR: "ID",
+    ILS: "IL",
+    INR: "IN",
+    IQD: "IQ",
+    IRR: "IR",
+    ISK: "IS",
+    JMD: "JM",
+    JOD: "JO",
+    JPY: "JP",
+    KES: "KE",
+    KGS: "KG",
+    KHR: "KH",
+    KMF: "KM",
+    KPW: "KP",
+    KRW: "KR",
+    KWD: "KW",
+    KYD: "KY",
+    KZT: "KZ",
+    LAK: "LA",
+    LBP: "LB",
+    LKR: "LK",
+    LRD: "LR",
+    LSL: "LS",
+    LTL: "LT",
+    LVL: "LV",
+    LYD: "LY",
+    MAD: "MA",
+    MDL: "MD",
+    MGA: "MG",
+    MKD: "MK",
+    MMK: "MM",
+    MNT: "MN",
+    MOP: "MO",
+    MRO: "MR",
+    MTL: "MT",
+    MUR: "MU",
+    MVR: "MV",
+    MWK: "MW",
+    MXN: "MX",
+    MYR: "MY",
+    MZN: "MZ",
+    NAD: "NA",
+    XPF: "NC",
+    NGN: "NG",
+    NIO: "NI",
+    NPR: "NP",
+    NZD: "NZ",
+    OMR: "OM",
+    PAB: "PA",
+    PEN: "PE",
+    PGK: "PG",
+    PHP: "PH",
+    PKR: "PK",
+    PLN: "PL",
+    PYG: "PY",
+    QAR: "QA",
+    RON: "RO",
+    RSD: "RS",
+    RUB: "RU",
+    RWF: "RW",
+    SAR: "SA",
+    SBD: "SB",
+    SCR: "SC",
+    SDG: "SD",
+    SEK: "SE",
+    SGD: "SG",
+    SKK: "SK",
+    SLL: "SL",
+    SOS: "SO",
+    SRD: "SR",
+    STD: "ST",
+    SVC: "SV",
+    SYP: "SY",
+    SZL: "SZ",
+    THB: "TH",
+    TJS: "TJ",
+    TMT: "TM",
+    TND: "TN",
+    TOP: "TO",
+    TRY: "TR",
+    TTD: "TT",
+    TWD: "TW",
+    TZS: "TZ",
+    UAH: "UA",
+    UGX: "UG",
+    USD: "US",
+    UYU: "UY",
+    UZS: "UZ",
+    VEF: "VE",
+    VND: "VN",
+    VUV: "VU",
+    YER: "YE",
+    ZAR: "ZA",
+    ZMK: "ZM",
+    ZWD: "ZW",
+  };
+  
+  let ite1=document.querySelector(".from-data select")
+  let ite2=document.querySelector(".to-data select")
+  let content=document.querySelector("#data-final");
+  
+  
+for(let select in countryList)
+{
+    let new1=document.createElement("option");
+    new1.innerText=countryList[select];
+    new1.value=select;
+    ite1.appendChild(new1);
+}
+for(let select in countryList)
+    {
+        let new1=document.createElement("option");
+        new1.innerText=countryList[select];
+        new1.value=select;
+        ite2.appendChild(new1);
+    }
+
+
+
+  let result=document.querySelector("#final-result");
+  let btn = document.querySelector("#final");
+  
+  let img1=document.querySelector(".first");
+  let img2=document.querySelector(".second");
+
+
+function getValue() {
+    
+    let num=document.querySelector(".input-num").value;
+    let from=document.querySelector("#sample1").value;
+    let to=document.querySelector("#sample2").value;
+    // content.innerText=`${num} convert to ${from} to ${to}`
+    
+    let one=`https://flagsapi.com/${countryList[from]}/flat/64.png`
+    let two=`https://flagsapi.com/${countryList[to]}/flat/64.png`
+    console.log(from,to)
+    
+    img1.src=one
+    img2.src=two
+
+    let refre=`https://latest.currency-api.pages.dev/v1/currencies/${from.toLowerCase()}.json`;
+    async function fetchData()
+    {
+        let f=await fetch(refre);
+        let j=await f.json()
+        let result1=j[from.toLowerCase()][to.toLowerCase()]
+        result.innerText=result1*num;
+
+    }
+    fetchData();
+}
+
+btn.addEventListener("click",getValue)
+    </script>
+</body>
+</html>
