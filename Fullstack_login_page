@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .sub {
+            padding: 7px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: aquamarine;
+            margin-top: 10px;
+        }
+        .sub:hover {
+            opacity: 0.7;
+        }
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">LOGIN FORM</h1>
+    <div class="container">
+        <input type="email" id="useremail" placeholder="Enter Email">
+        <br>
+        <input type="password" id="userpass" placeholder="Enter Password">
+        <p id="result"></p>
+        <button class="sub" onclick="submiting()">Submit</button>
+    </div>
+
+    <script>
+        async function submiting() {
+            let email = document.querySelector("#useremail").value.trim();
+            let pass = document.querySelector("#userpass").value.trim();
+            let result = document.querySelector("#result");
+
+            // Validate email and password
+            if (!email || !pass) {
+                result.innerText = "Email and password are required!";
+                result.style.color = "red";
+                return;
+            }
+
+            // Validate email format
+            
+            let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                result.innerText = "Enter a valid email format!";
+                result.style.color = "red";
+                return;
+            }
+
+            try {
+                // Sending data to Flask backend
+                const response = await fetch("http://127.0.0.1:5000/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, pass: pass })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.innerText = data.message;
+                    result.style.color = "green";
+                    document.querySelector("#useremail").value = "";
+                    document.querySelector("#userpass").value = "";
+                } else {
+                    result.innerText = data.error;
+                    result.style.color = "red";
+                }
+            }
+            catch (error) {
+                result.innerText = "Error connecting to the server!";
+                result.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PYTHON BACKEND
+_____________
+
+from flask import Flask, request, jsonify
+import oracledb
+from flask_cors import CORS
+
+oracledb.init_oracle_client(lib_dir=r"C:\Users\sures\Downloads\instantclient-basic-windows.x64-21.17.0.0.0dbru\instantclient_21_17")
+
+fullstack = Flask(__name__)
+CORS(fullstack)
+
+USERNAME = "SURESH"
+PASSWORD = "HR"
+DSN = "localhost/XE"
+
+def connection():
+    try:
+        return oracledb.connect(user=USERNAME, password=PASSWORD, dsn=DSN)
+    except Exception as e:
+        print(f"Database connection error: {e}")
+        return None
+
+@fullstack.route('/')
+def home():
+    return jsonify({"sample": "API is working!"})
+
+@fullstack.route('/submit', methods=['POST'])
+def data_insert():
+    try:
+        data = request.json
+        email = data.get("email")
+        password = data.get("pass")
+
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
+        
+        conn = connection()
+        if conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute("INSERT INTO MY (email, pass) VALUES (:1, :2)", (email, password))
+                conn.commit()
+                return jsonify({"message": "Data inserted successfully!"}), 201
+            except Exception as e:
+                return jsonify({"error": f"SQL error: {str(e)}"}), 500
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            return jsonify({"error": "Database connection lost!"}), 500
+
+    except Exception as e:
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+if __name__ == '__main__':
+    fullstack.run(debug=True)
