@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="app.css"> -->
+     <style>
+        *
+{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+body{
+    align-items: center;
+    background-color: #FFF2DB;
+}
+.msgcontainer
+{
+    height: 120vmin;
+    font-size: 10vmin;
+}
+.container
+{
+    height: 70vmin;
+    width: 140vmin;
+    justify-content: center;
+    align-items: center;
+    /* background-color: yellow; */
+}
+.game
+{
+    height: 70vmin;
+    width: 70vmin;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2vmin;
+    /* background-color: pink; */
+    padding-left: 55vmin;
+}
+.box
+{
+    height: 20vmin;
+    width: 20vmin;
+    border-radius: 3vmin;
+    font-size: 7vmin;
+    color: black;
+    background-color: pink;
+    border: none;
+}
+#reset-btn,#replay-btn
+{
+    padding: 2vmin;
+    background-color: lightsalmon;
+    border-radius: 2vmin;
+}
+.hide
+{
+    display: none;
+}
+.data
+{
+    font-size: 10vmin;
+    margin-bottom: 7vmin;
+}
+     </style>
+</head>
+<body>
+    <div class="msgcontainer hide">
+        <p class="msg">Winner</p>
+        <button id="replay-btn">REPLAY</button>
+    </div>
+    <div class="data">
+        <strong>TIC-TAC-TOE</strong>
+    </div>
+    <div class="container">
+        <div class="game">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+        </div>
+    </div>
+    <div class="restcontainer">
+        <button id="reset-btn">RESET</button>
+    </div>
+    <!-- <script src="app.js"></script> -->
+     <script>
+        let boxes = document.querySelectorAll(".box");
+let msgcont = document.querySelector(".msgcontainer");
+let msg = document.querySelector(".msg");
+let replaybtn = document.querySelector("#replay-btn");
+let resetbtn = document.querySelector("#reset-btn");
+
+
+winner=[
+    [1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]
+];
+
+let count = 0;
+let conform = true;
+
+const replatbtnactive = () => {
+    for (let box of boxes) {
+        box.disabled = false;
+        box.innerText = " ";
+    }
+    msgcont.classList.add("hide")
+};
+
+boxes.forEach((box) => {
+    box.addEventListener("click", () => {
+        if (conform) {
+            box.innerText = "X";
+            count++;
+            conform = false;
+        } else {
+            box.innerText = "O";
+            count++;
+            conform = true;
+        }
+        box.disabled = true;
+        testdata();
+    });
+});
+
+const testdata = () => {
+    for (let p of winner) {
+        let p1 = boxes[p[0]-1].innerText;
+        let p2 = boxes[p[1]-1].innerText;
+        let p3 = boxes[p[2]-1].innerText;
+        if (p1 !== "" && p2 !== "" && p3 !== "") {
+            if (p1 === p2 && p2 === p3) {
+                showdata(p1);
+                return true;
+            }
+        }
+    }
+};
+
+const showdata = (data) => {
+    msgcont.classList.remove("hide");
+    msg.innerText = `Winner: ${data}`;
+};
+
+replaybtn.addEventListener("click", replatbtnactive);
+resetbtn.addEventListener("click", replatbtnactive);
+
+     </script>
+</body>
+</html>   
